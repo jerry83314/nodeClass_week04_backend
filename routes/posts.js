@@ -1,10 +1,13 @@
 var express = require('express');
 var router = express.Router();
 const Posts = require('../models/postsModel');
+const Users = require('../models/usersModel');
 
 // 取得所有 posts
 router.get('/', async (req, res, next) => {
-  const posts = await Posts.find();
+  const posts = await Posts.find().populate({
+    path: 'user'
+  })
   res.status(200).json(
     {
       "status": "success",
@@ -18,10 +21,8 @@ router.post('/', async (req, res, next) => {
   try {
     const data = req.body;
     await Posts.create({
-      name: data.name,
-      tags: data.tags,
-      type: "",
-      image: "",
+      user: data.user,
+      photo: data.photo,
       createAt: "",
       content: data.content,
       likes: 0,
