@@ -3,10 +3,9 @@ const postsSchema = new mongoose.Schema({
   photo: {
     type: String
   },
-  createAt: {
+  createdAt: {
     type: Date,
-    default: Date.now,
-    select: false,
+    default: Date.now
   },
   content: {
     type: String,

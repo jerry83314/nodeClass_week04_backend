@@ -5,9 +5,11 @@ const Users = require('../models/usersModel');
 
 // 取得所有 posts
 router.get('/', async (req, res, next) => {
+  const timeSort = req.query.timeSort == "asc" ? "createdAt":"-createdAt"
   const posts = await Posts.find().populate({
-    path: 'user'
-  })
+    path: 'user',
+    select: 'name'
+  }).sort(timeSort)
   res.status(200).json(
     {
       "status": "success",
@@ -23,7 +25,6 @@ router.post('/', async (req, res, next) => {
     await Posts.create({
       user: data.user,
       photo: data.photo,
-      createAt: "",
       content: data.content,
       likes: 0,
       comments: 0
