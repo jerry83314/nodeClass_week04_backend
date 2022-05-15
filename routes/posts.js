@@ -6,7 +6,8 @@ const Users = require('../models/usersModel');
 // 取得所有 posts
 router.get('/', async (req, res, next) => {
   const timeSort = req.query.timeSort == "asc" ? "createdAt":"-createdAt"
-  const posts = await Posts.find().populate({
+  const q = req.query.q !== undefined ? {"content": new RegExp(req.query.q)} : {};
+  const posts = await Posts.find(q).populate({
     path: 'user',
     select: 'name photo'
   }).sort(timeSort)
