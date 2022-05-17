@@ -1,0 +1,78 @@
+{
+	"info": {
+		"_postman_id": "2d1a3cec-0d09-44cf-9529-fc7a37fcef58",
+		"name": "nodeClass__week04 - heroku",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "取得所有 users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://thawing-retreat-19220.herokuapp.com/users",
+					"protocol": "https",
+					"host": [
+						"thawing-retreat-19220",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "取得所有 posts",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://thawing-retreat-19220.herokuapp.com/posts",
+					"protocol": "https",
+					"host": [
+						"thawing-retreat-19220",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "新增一筆 posts",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user\": \"627a7d903daec2a5eda5f42b\",\n    \"photo\": \"https://tw.images.search.yahoo.com\",\n    \"content\": \"測試資料005\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://thawing-retreat-19220.herokuapp.com/posts",
+					"protocol": "https",
+					"host": [
+						"thawing-retreat-19220",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
