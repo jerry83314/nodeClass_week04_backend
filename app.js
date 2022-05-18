@@ -5,8 +5,16 @@ var cors = require('cors');
 var logger = require('morgan');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-dotenv.config({ path: './config.env' });
 
+// 程式出現重大錯誤時
+process.on('uncaughtException', err => {
+  // 記錄錯誤下來，等到服務都處理完後，停掉該 process
+	console.error('Uncaughted Exception！')
+	console.error(err);
+	process.exit(1);
+});
+
+dotenv.config({ path: './config.env' });
 const DB = process.env.DATABASE.replace(
   '<password>',
   process.env.DATABASE_PASSWORD
@@ -48,6 +56,10 @@ app.use(function(err,req,res,next){
   res.status(500).json({
       "err": err.message
   })
-})
+});
 
+// 未捕捉到的 catch 
+process.on('unhandledRejection', (err, promise) => {
+  console.error('未捕捉到的 rejection：', promise, '原因：', err);
+});
 module.exports = app;
