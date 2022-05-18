@@ -6,8 +6,8 @@ const Users = require('../models/usersModel');
 
 // 取得所有 posts
 router.get('/', async (req, res, next) => {
-  const timeSort = req.query.timeSort == "asc" ? "createdAt":"-createdAt"
-  const q = req.query.q !== undefined ? {"content": new RegExp(req.query.q)} : {};
+  const timeSort = req.query.timeSort == "asc" ? "createdAt" : "-createdAt"
+  const q = req.query.q !== undefined ? { "content": new RegExp(req.query.q) } : {};
   const posts = await Posts.find(q).populate({
     path: 'user',
     select: 'name photo'
@@ -22,11 +22,12 @@ router.get('/', async (req, res, next) => {
 
 // 新增一筆 posts
 router.post('/', async (req, res, next) => {
+  const data = req.body;
+  if (req.body.content == undefined) {
+    return next(appError(400, "你沒有填寫 content 資料", next))
+  }
+
   try {
-    const data = req.body;
-    if(req.body.content == undefined){
-      return next(appError(400,"你沒有填寫 content 資料",next))
-    }
     await Posts.create({
       user: data.user,
       photo: data.photo,
@@ -42,13 +43,7 @@ router.post('/', async (req, res, next) => {
       }
     );
   } catch (error) {
-    res.status(400).json(
-      {
-        "status": "false",
-        "message": "格式錯誤",
-        "error": error
-      }
-    );
+    return next(error);
   }
 });
 
