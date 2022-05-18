@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var appError = require('../service/appError');
 const Posts = require('../models/postsModel');
 const Users = require('../models/usersModel');
 
@@ -23,6 +24,9 @@ router.get('/', async (req, res, next) => {
 router.post('/', async (req, res, next) => {
   try {
     const data = req.body;
+    if(req.body.content == undefined){
+      return next(appError(400,"你沒有填寫 content 資料",next))
+    }
     await Posts.create({
       user: data.user,
       photo: data.photo,
