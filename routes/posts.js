@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var appError = require('../service/appError');
+var handleErrorAsync = require('../service/handleErrorAsync');
 const Posts = require('../models/postsModel');
 const Users = require('../models/usersModel');
 
@@ -21,31 +22,26 @@ router.get('/', async (req, res, next) => {
 });
 
 // 新增一筆 posts
-router.post('/', async (req, res, next) => {
+router.post('/', handleErrorAsync(async (req, res, next) => {
   const data = req.body;
   if (req.body.content == undefined) {
     return next(appError(400, "你沒有填寫 content 資料", next))
   }
-
-  try {
-    await Posts.create({
-      user: data.user,
-      photo: data.photo,
-      content: data.content,
-      likes: 0,
-      comments: 0
-    });
-    const posts = await Posts.find();
-    res.status(200).json(
-      {
-        "status": "success",
-        "data": posts
-      }
-    );
-  } catch (error) {
-    return next(error);
-  }
-});
+  await Posts.create({
+    user: data.user,
+    photo: data.photo,
+    content: data.content,
+    likes: 0,
+    comments: 0
+  });
+  const posts = await Posts.find();
+  res.status(200).json(
+    {
+      "status": "success",
+      "data": posts
+    }
+  );
+}));
 
 // 刪除全部 posts
 router.delete('/', async (req, res, next) => {
