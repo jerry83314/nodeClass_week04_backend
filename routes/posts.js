@@ -6,7 +6,7 @@ const Posts = require('../models/postsModel');
 const Users = require('../models/usersModel');
 
 // 取得所有 posts
-router.get('/', async (req, res, next) => {
+router.get('/', handleErrorAsync(async (req, res, next) => {
   const timeSort = req.query.timeSort == "asc" ? "createdAt" : "-createdAt"
   const q = req.query.q !== undefined ? { "content": new RegExp(req.query.q) } : {};
   const posts = await Posts.find(q).populate({
@@ -19,7 +19,7 @@ router.get('/', async (req, res, next) => {
       "data": posts
     }
   );
-});
+}));
 
 // 新增一筆 posts
 router.post('/', handleErrorAsync(async (req, res, next) => {
@@ -44,7 +44,7 @@ router.post('/', handleErrorAsync(async (req, res, next) => {
 }));
 
 // 刪除全部 posts
-router.delete('/', async (req, res, next) => {
+router.delete('/', handleErrorAsync(async (req, res, next) => {
   await Posts.deleteMany({});
   const posts = await Posts.find();
   res.status(200).json(
@@ -53,13 +53,29 @@ router.delete('/', async (req, res, next) => {
       "data": posts
     }
   );
-});
+}));
 
 // 刪除單筆 posts
-router.delete('/:id', async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    await Posts.findByIdAndDelete(id);
+router.delete('/:id', handleErrorAsync(async (req, res, next) => {
+  const { id } = req.params;
+  await Posts.findByIdAndDelete(id);
+  const posts = await Posts.find();
+  res.status(200).json(
+    {
+      "status": "success",
+      "data": posts
+    }
+  );
+}));
+
+// 更新單筆 posts
+router.patch('/:id', handleErrorAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const data = req.body;
+  if (data.content !== '' && data.content !== undefined) {
+    await Posts.findByIdAndUpdate(id, data, {
+      runValidators: true
+    });
     const posts = await Posts.find();
     res.status(200).json(
       {
@@ -67,51 +83,9 @@ router.delete('/:id', async (req, res, next) => {
         "data": posts
       }
     );
-  } catch (error) {
-    res.status(400).json(
-      {
-        "status": "false",
-        "message": "無此 ID",
-        "error": error
-      }
-    );
+  } else {
+    next(appError(400, "你沒有填寫 content 資料", next));
   }
-});
-
-// 更新單筆 posts
-router.patch('/:id', async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const data = req.body;
-    if (data.content !== '' && data.content !== undefined) {
-      await Posts.findByIdAndUpdate(id, data, {
-        runValidators: true
-      });
-      const posts = await Posts.find();
-      res.status(200).json(
-        {
-          "status": "success",
-          "data": posts
-        }
-      );
-    } else {
-      res.status(400).json(
-        {
-          "status": "false",
-          "message": "content 未填寫",
-          "error": error
-        }
-      );
-    }
-  } catch (error) {
-    res.status(400).json(
-      {
-        "status": "false",
-        "message": "無此 ID或格式錯誤",
-        "error": error
-      }
-    );
-  }
-});
+}));
 
 module.exports = router;
