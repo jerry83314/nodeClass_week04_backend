@@ -35,4 +35,32 @@ app.use('/', indexRouter);
 app.use('/posts', postsRouter);
 app.use('/users', usersRouter);
 
+// 程式出現重大錯誤時
+process.on('uncaughtException', err => {
+  // 記錄錯誤下來，等到服務都處理完後，停掉該 process
+	console.error('Uncaughted Exception！')
+	console.error(err);
+	process.exit(1);
+});
+
+// 404 錯誤
+app.use(function(req, res, next) {
+  res.status(404).json({
+    status: 'error',
+    message: "無此路由資訊",
+  });
+});
+
+// express 錯誤處理
+app.use(function(err,req,res,next){
+  res.status(500).json({
+      "err": err.message
+  })
+});
+
+// 未捕捉到的 catch 
+process.on('unhandledRejection', (err, promise) => {
+  console.error('未捕捉到的 rejection：', promise, '原因：', err);
+});
+
 module.exports = app;
