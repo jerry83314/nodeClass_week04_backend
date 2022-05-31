@@ -70,7 +70,6 @@ router.post('/sign_in',handleErrorAsync(async(req,res,next)=>{
 
 // 個人頁
 router.get('/profile/',isAuth, handleErrorAsync(async(req, res, next) =>{
-
   res.status(200).json({
     status: 'success',
     user: req.user
@@ -79,7 +78,6 @@ router.get('/profile/',isAuth, handleErrorAsync(async(req, res, next) =>{
 
 // 更新密碼
 router.post('/updatePassword',isAuth,handleErrorAsync(async(req,res,next)=>{
-  
   const {password,confirmPassword } = req.body;
   if(password!==confirmPassword){
     return next(appError("400","密碼不一致！",next));
@@ -90,6 +88,23 @@ router.post('/updatePassword',isAuth,handleErrorAsync(async(req,res,next)=>{
     password:newPassword
   });
   generateSendJWT(user,200,res)
+}))
+
+// 更新個人頁
+router.patch('/profile/',isAuth, handleErrorAsync(async(req, res, next) =>{
+  const { id } = req.user;
+  const { name } = req.body;
+
+  await Users.findByIdAndUpdate(id, {
+    name
+  });
+
+  const newUser = await Users.findById(id);
+
+  res.status(200).json({
+    status: 'success',
+    user: newUser
+  });
 }))
 
 module.exports = router;

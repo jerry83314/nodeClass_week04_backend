@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 const postsSchema = new mongoose.Schema({
   photo: {
-    type: String
+    type: String,
+    default: ''
   },
   createdAt: {
     type: Date,

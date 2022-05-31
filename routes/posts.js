@@ -4,6 +4,7 @@ var appError = require('../service/appError');
 var handleErrorAsync = require('../service/handleErrorAsync');
 const Posts = require('../models/postsModel');
 const Users = require('../models/usersModel');
+const {isAuth,generateSendJWT} = require('../service/auth');
 
 // 取得所有 posts
 router.get('/', handleErrorAsync(async (req, res, next) => {
@@ -22,23 +23,22 @@ router.get('/', handleErrorAsync(async (req, res, next) => {
 }));
 
 // 新增一筆 posts
-router.post('/', handleErrorAsync(async (req, res, next) => {
-  const data = req.body;
-  if (req.body.content == undefined) {
+router.post('/', isAuth, handleErrorAsync(async (req, res, next) => {
+  const { content } = req.body;
+
+  if (content == undefined) {
     return next(appError(400, "你沒有填寫 content 資料", next))
   }
-  await Posts.create({
-    user: data.user,
-    photo: data.photo,
-    content: data.content,
-    likes: 0,
-    comments: 0
+  
+  const newPost = await Posts.create({
+    user: req.user.id,
+    content
   });
-  const posts = await Posts.find();
+
   res.status(200).json(
     {
       "status": "success",
-      "data": posts
+      "data": newPost
     }
   );
 }));
