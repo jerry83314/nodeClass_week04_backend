@@ -1,0 +1,204 @@
+{
+	"info": {
+		"_postman_id": "9a82015e-c47f-4a40-933b-a5241a5205b3",
+		"name": "nodeClass__week06 - heroku",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19673671"
+	},
+	"item": [
+		{
+			"name": "註冊",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"jerry1234567\",\n    \"email\": \"jerry1234567@gmail.com\",\n    \"password\": \"12345678\",\n    \"confirmPassword\": \"12345678\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://thawing-retreat-19220.herokuapp.com/users/sign_up",
+					"protocol": "https",
+					"host": [
+						"thawing-retreat-19220",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"users",
+						"sign_up"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "登入",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"jerry123456@gmail.com\",\n    \"password\": \"12345678\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://thawing-retreat-19220.herokuapp.com/users/sign_in",
+					"protocol": "https",
+					"host": [
+						"thawing-retreat-19220",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"users",
+						"sign_in"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "進入個人頁",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyOTVmZWNiZWQ2NzhiYjBiNjk4MjE2OSIsImlhdCI6MTY1Mzk5NzQ0NywiZXhwIjoxNjU0NjAyMjQ3fQ.KBYNjxcjYh3VDI1RpRmZdF2eZscsX5ZgrrCxfwtUjBc",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://thawing-retreat-19220.herokuapp.com/users/profile",
+					"protocol": "https",
+					"host": [
+						"thawing-retreat-19220",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"users",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "更新密碼",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyOTVmZWNiZWQ2NzhiYjBiNjk4MjE2OSIsImlhdCI6MTY1Mzk5NzQ0NywiZXhwIjoxNjU0NjAyMjQ3fQ.KBYNjxcjYh3VDI1RpRmZdF2eZscsX5ZgrrCxfwtUjBc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"password\": \"12345678\",\n    \"confirmPassword\": \"12345678\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://thawing-retreat-19220.herokuapp.com/users/updatePassword",
+					"protocol": "https",
+					"host": [
+						"thawing-retreat-19220",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"users",
+						"updatePassword"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "更新個人頁",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyOTVmZWNiZWQ2NzhiYjBiNjk4MjE2OSIsImlhdCI6MTY1Mzk5NzQ0NywiZXhwIjoxNjU0NjAyMjQ3fQ.KBYNjxcjYh3VDI1RpRmZdF2eZscsX5ZgrrCxfwtUjBc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"cute Jerry\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://thawing-retreat-19220.herokuapp.com/users/profile",
+					"protocol": "https",
+					"host": [
+						"thawing-retreat-19220",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"users",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "新增貼文(加入驗證)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyOTVmZWNiZWQ2NzhiYjBiNjk4MjE2OSIsImlhdCI6MTY1Mzk5NzQ0NywiZXhwIjoxNjU0NjAyMjQ3fQ.KBYNjxcjYh3VDI1RpRmZdF2eZscsX5ZgrrCxfwtUjBc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"content\": \"你今天喝水了嗎？\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://thawing-retreat-19220.herokuapp.com/posts",
+					"protocol": "https",
+					"host": [
+						"thawing-retreat-19220",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
