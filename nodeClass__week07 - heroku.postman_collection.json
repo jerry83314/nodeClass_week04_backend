@@ -1,0 +1,46 @@
+{
+	"info": {
+		"_postman_id": "1016ff28-d884-4f1e-87b6-55f877c10db3",
+		"name": "nodeClass__week07 - heroku",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19673671"
+	},
+	"item": [
+		{
+			"name": "上傳圖片",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyOTVmZWNiZWQ2NzhiYjBiNjk4MjE2OSIsImlhdCI6MTY1NDM0NzU5OSwiZXhwIjoxNjU0OTUyMzk5fQ.8McGi8kyOW3wltCCxT_8MpkUYA4GkF-HX3HAvzLhZRs",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "",
+							"type": "file",
+							"src": "/Users/jerryhuang/Desktop/unnamed.png"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://thawing-retreat-19220.herokuapp.com/upload",
+					"protocol": "https",
+					"host": [
+						"thawing-retreat-19220",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"upload"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
