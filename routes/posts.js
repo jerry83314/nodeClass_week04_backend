@@ -88,4 +88,34 @@ router.patch('/:id', handleErrorAsync(async (req, res, next) => {
   }
 }));
 
+// 新增讚
+router.post('/:id/likes', isAuth, handleErrorAsync(async (req, res, next) => {
+  // 此 :id 為貼文 ID
+  const _id = req.params.id;
+  await Posts.findOneAndUpdate(
+      { _id },
+      { $addToSet: { likes: req.user.id } }
+    );
+    res.status(201).json({
+      status: 'success',
+      postId: _id,
+      userId: req.user.id
+    });
+}));
+
+
+// 刪除讚
+router.delete('/:id/likes', isAuth, handleErrorAsync(async (req, res, next) =>  {
+  const _id = req.params.id;
+  await Posts.findOneAndUpdate(
+      { _id },
+      { $pull: { likes: req.user.id } }
+    );
+    res.status(201).json({
+      status: 'success',
+      postId: _id,
+      userId: req.user.id
+    });
+}));
+
 module.exports = router;
