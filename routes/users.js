@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const handleErrorAsync = require('../service/handleErrorAsync');
 const validator = require('validator');
 const Users = require('../models/usersModel');
+const Posts = require('../models/postsModel');
 const { isAuth, generateSendJWT } = require('../service/auth');
 
 // 取得所有 users
@@ -104,6 +105,20 @@ router.patch('/profile/',isAuth, handleErrorAsync(async(req, res, next) =>{
   res.status(200).json({
     status: 'success',
     user: newUser
+  });
+}))
+
+// 個人按讚貼文列表
+router.get('/getLikeList',isAuth, handleErrorAsync(async(req, res, next) =>{
+  const likeList = await Posts.find({
+    likes: { $in: [req.user.id] }
+  }).populate({
+    path:"user",
+    select:"name _id"
+  });
+  res.status(200).json({
+    status: 'success',
+    likeList
   });
 }))
 

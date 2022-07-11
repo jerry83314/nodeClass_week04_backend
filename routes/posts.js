@@ -118,4 +118,17 @@ router.delete('/:id/likes', isAuth, handleErrorAsync(async (req, res, next) =>  
     });
 }));
 
+// 個人貼文列表
+router.get('/user/:id', handleErrorAsync(async(req, res, next) =>  {
+  // :id 為 user ID
+  const user = req.params.id;
+  const posts = await Posts.find({user});
+
+  res.status(200).json({
+      status: 'success',
+      results: posts.length,
+      posts
+  });
+}));
+
 module.exports = router;
