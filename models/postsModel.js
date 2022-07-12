@@ -18,17 +18,22 @@ const postsSchema = new mongoose.Schema({
       ref: 'users' 
     }
   ],
-  comments: {
-    type: Number,
-    default: 0,
-  },
   user: {
     type: mongoose.Schema.ObjectId,
+    // ref 對應 usersModel
     ref: 'users',
     required: [true, "貼文 id 未填寫"],
   }
 }, {
-  versionKey: false
+  versionKey: false,
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true }
+});
+
+postsSchema.virtual('comments', {
+  ref: 'Comment',
+  foreignField: 'post',
+  localField: '_id'
 });
 
 const posts = mongoose.model("posts", postsSchema);

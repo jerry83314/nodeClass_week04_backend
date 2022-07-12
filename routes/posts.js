@@ -4,15 +4,20 @@ var appError = require('../service/appError');
 var handleErrorAsync = require('../service/handleErrorAsync');
 const Posts = require('../models/postsModel');
 const Users = require('../models/usersModel');
+const Comment = require('../models/commentsModel');
 const {isAuth,generateSendJWT} = require('../service/auth');
 
 // 取得所有 posts
 router.get('/', handleErrorAsync(async (req, res, next) => {
   const timeSort = req.query.timeSort == "asc" ? "createdAt" : "-createdAt"
   const q = req.query.q !== undefined ? { "content": new RegExp(req.query.q) } : {};
+  // populate 對應 schema 內的欄位
   const posts = await Posts.find(q).populate({
     path: 'user',
     select: 'name photo'
+  }).populate({
+    path: 'comments',
+    select: 'comment user'
   }).sort(timeSort)
   res.status(200).json(
     {
@@ -130,5 +135,24 @@ router.get('/user/:id', handleErrorAsync(async(req, res, next) =>  {
       posts
   });
 }));
+
+// 留言
+router.post('/:id/comment',isAuth, handleErrorAsync(async(req, res, next) =>  {
+  const user = req.user.id;
+  const post = req.params.id;
+  const {comment} = req.body;
+  const newComment = await Comment.create({
+    post,
+    user,
+    comment
+  });
+  res.status(201).json({
+      status: 'success',
+      data: {
+        comments: newComment
+      }
+  });
+
+}))
 
 module.exports = router;
