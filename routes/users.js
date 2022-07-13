@@ -122,4 +122,69 @@ router.get('/getLikeList',isAuth, handleErrorAsync(async(req, res, next) =>{
   });
 }))
 
+// 追蹤別人
+router.post('/:id/follow',isAuth, handleErrorAsync(async(req, res, next) =>{
+
+  if (req.params.id === req.user.id) {
+    return next(appError(401,'您無法追蹤自己',next));
+  }
+  await Users.updateOne(
+    {
+      // 找出自己的 ID
+      _id: req.user.id,
+      // $ne => not equql
+      // 追蹤名單內(following.user) 不等於 要追蹤的 :id 值
+      'following.user': { $ne: req.params.id }
+    },
+    {
+      // 在自己追蹤名單內是否有無 :id，沒有的話就加入
+      $addToSet: { following: { user: req.params.id } }
+    }
+  );
+  await Users.updateOne(
+    {
+      // 找出 :id 
+      _id: req.params.id,
+      // 該 :id 的追蹤名單內(followers.user) 不等於 自己的 ID
+      'followers.user': { $ne: req.user.id }
+    },
+    {
+      // 在對方的追蹤名單內，是否有自己的 ID，沒有的話就加入
+      $addToSet: { followers: { user: req.user.id } }
+    }
+  );
+  res.status(200).json({
+    status: 'success',
+    message: '您已成功追蹤！'
+  });
+}))
+
+// 取消追蹤
+router.delete('/:id/unfollow',isAuth, handleErrorAsync(async(req, res, next) =>{
+
+  if (req.params.id === req.user.id) {
+    return next(appError(401,'您無法取消追蹤自己',next));
+  }
+  await Users.updateOne(
+    {
+      _id: req.user.id
+    },
+    {
+      $pull: { following: { user: req.params.id } }
+    }
+  );
+  await Users.updateOne(
+    {
+      _id: req.params.id
+    },
+    {
+      $pull: { followers: { user: req.user.id } }
+    }
+  );
+  res.status(200).json({
+    status: 'success',
+    message: '您已成功取消追蹤！'
+  });
+}))
+
 module.exports = router;
